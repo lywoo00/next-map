@@ -1,18 +1,19 @@
-import Image from "next/image";
-import { Geist, Geist_Mono } from "next/font/google";
-
-const geistSans = Geist({
-  variable: "--font-geist-sans",
-  subsets: ["latin"],
-});
-
-const geistMono = Geist_Mono({
-  variable: "--font-geist-mono",
-  subsets: ["latin"],
-});
+import Layout from "@/components/Layout";
+import Link from "next/link";
 
 export default function Home() {
   return (
-    <h1>Hello</h1>
+    <Layout>
+    <h1>Map Index Page</h1>
+    <ul>
+      <li><Link href="/stores">맛집 목록</Link></li>
+      <li><Link href="/stores/new">맛집 생성</Link></li>
+      <li><Link href="/stores/1">맛집 상세 페이지</Link></li>
+      <li><Link href="/stores/1/edit">맛집 수정</Link></li>
+      <li><Link href="/users/login">로그인</Link></li>
+      <li><Link href="/users/mypage">마이 페이지</Link></li>
+      <li><Link href="/users/likes">찜힌 맛집</Link></li>
+    </ul>
+    </Layout>
   );
 }

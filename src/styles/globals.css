@@ -1,26 +1,86 @@
-@import "tailwindcss";
-
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
+* {padding: 0; margin: 0; box-sizing: border-box;}
+li {list-style: none;}
+a {text-decoration: none; color:#000;}
+button {background: none; border: none;}
+.layout {
+  padding-top: 52px;
+}
+.navbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  position: fixed;
+  width: 100%;
+  top: 0;
+  height: 52px;
+  box-shadow: 0 1px 2px 0 rgb(0 0 0 / 0.05);
+  background: white;
+  padding: 0 10px;
 }
 
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+.navbar__logo {
+  color: darkblue;
+  font-size: 18px;
+  font-weight: 600;
+  cursor: pointer;
+  padding: 0 10pz;
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
+.navbar__list {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.navbar__button {
+  display: none;
+  font-size: 20px;
+  cursor: pointer;
+}
+
+.navbar__list--item {
+  cursor: pointer;
+}
+
+.navbar--mobile {
+  display: none;
+  position: fixed;
+    width: 100%;
+    left: 0;
+    top: 52px;
+    background: darkblue;
+    color: white;
+    height: 100vh;
+}
+
+.navbar__list--item a:hover {
+ color: darkgray;
+}
+@media only screen and (max-width: 600px) {
+  .navbar__list {display: none;}
+
+  .navbar--mobile {
+    display: block;
+    
   }
+
+  .navbar__list--mobile {
+    padding-left: 10px;
+  }
+  .navbar__list--item--mobile {
+    margin-top: 10px;
+  }
+  .navbar__list--item--mobile a {
+    color: #fff;
+    cursor: pointer;
+    padding: 10px 0;
+    display: inline-block;
+    
+  }
+
+.navbar__button {
+  display: block;
 }
 
-body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
-}
+
+} 
