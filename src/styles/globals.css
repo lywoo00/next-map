@@ -1,85 +1,63 @@
+@import "tailwindcss";
+
+
 * {padding: 0; margin: 0; box-sizing: border-box;}
 li {list-style: none;}
 a {text-decoration: none; color:#000;}
 button {background: none; border: none;}
 .layout {
-  padding-top: 52px;
+  @apply pt-[52px]
 }
 .navbar {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  position: fixed;
-  width: 100%;
-  top: 0;
-  height: 52px;
-  box-shadow: 0 1px 2px 0 rgb(0 0 0 / 0.05);
-  background: white;
-  padding: 0 10px;
+  @apply flex justify-between items-center fixed w-full h-[52px] top-0 shadow-sm bg-white px-[10px]
 }
 
 .navbar__logo {
-  color: darkblue;
-  font-size: 18px;
-  font-weight: 600;
-  cursor: pointer;
-  padding: 0 10pz;
+  @apply text-blue-800 text-lg font-semibold cursor-pointer py-0
 }
 
 .navbar__list {
-  display: flex;
-  align-items: center;
-  gap: 12px;
+  @apply flex items-center gap-3
 }
 
 .navbar__button {
-  display: none;
-  font-size: 20px;
-  cursor: pointer;
+  @apply hidden cursor-pointer text-xl
 }
 
 .navbar__list--item {
-  cursor: pointer;
+  @apply cursor-pointer
 }
 
 .navbar--mobile {
-  display: none;
-  position: fixed;
-    width: 100%;
-    left: 0;
-    top: 52px;
-    background: darkblue;
-    color: white;
-    height: 100vh;
+  @apply hidden fixed w-full left-0 top-[52px] text-white h-screen bg-blue-800
+
 }
 
 .navbar__list--item a:hover {
- color: darkgray;
+ @apply text-gray-600
 }
 @media only screen and (max-width: 600px) {
-  .navbar__list {display: none;}
+  .navbar__list {
+    @apply hidden
+  }
 
   .navbar--mobile {
-    display: block;
-    
+    @apply block
   }
 
   .navbar__list--mobile {
-    padding-left: 10px;
+    @apply pl-[10px]
   }
   .navbar__list--item--mobile {
-    margin-top: 10px;
+    @apply mt-[10px]
   }
   .navbar__list--item--mobile a {
-    color: #fff;
-    cursor: pointer;
-    padding: 10px 0;
-    display: inline-block;
+    @apply text-white cursor-pointer py-[5px] inline-block
     
   }
 
 .navbar__button {
-  display: block;
+  @apply block
 }
 
 
