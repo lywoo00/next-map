@@ -1,14 +1,19 @@
 /*global kakao*/
+import { Dispatch, SetStateAction } from "react";
 import Script from "next/script";
 import * as stores from "@/data/store_data.json";
-import { setMaxIdleHTTPParsers } from "http";
+import Markers from "./Markers";
+import { AnyAaaaRecord } from "dns";
 declare global {
   interface Window {
     kakao: any;
   }
 }
 
-export default function Map() {
+interface MapProps {
+  setMap: Dispatch<SetStateAction<any>>;
+}
+export default function Map({ setMap }: MapProps) {
   const DEFAULT_LAT = 37.50042;
   const DEFUALT_LNG = 127.026821;
   const loadKakaoMap = () => {
@@ -21,41 +26,7 @@ export default function Map() {
         level: 3,
       };
       const map = new window.kakao.maps.Map(mapContainer, mapOption);
-      stores?.["DATA"].map((store) => {
-        var marker = new window.kakao.maps.Marker({
-          map: map,
-          position: new window.kakao.maps.LatLng(store.y_dnts, store.x_cnts),
-        });
-
-        marker.setMap(map);
-
-        let markerImg = store?.bizcnd_code_nm
-          ? store?.bizcnd_code_nm
-          : "default";
-        var markerImage = new window.kakao.maps.MarkerImage(
-          `/images/markers/${markerImg}.png`,
-          new window.kakao.maps.Size(31, 35),
-          new window.kakao.maps.Point(13, 34)
-        );
-        // marker.setPosition(new window.kakao.maps.LatLng(store.y_dnts, store.x_cnts));
-        marker.setImage(markerImage);
-
-        var infowindow = new window.kakao.maps.InfoWindow({
-          // map: map,
-          position: new window.kakao.maps.LatLng(store.y_dnts, store.x_cnts),
-          content: store.rdn_code_nm,
-        });
-
-        window.kakao.maps.event.addListener(marker, 'mouseover', function() {  
-          infowindow.open(map, marker);        
-      });
-
-      window.kakao.maps.event.addListener(marker, 'mouseout', function() {  
-        infowindow.close();        
-    });
-
-        
-      });
+      setMap(map);
     });
   };
 

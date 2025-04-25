@@ -1,13 +1,30 @@
 @import "tailwindcss";
 
 
-* {padding: 0; margin: 0; box-sizing: border-box;}
-li {list-style: none;}
-a {text-decoration: none; color:#000;}
-button {background: none; border: none;}
-.layout {
-   @apply pt-[52px]
+/* * {
+  padding: 0;
+  margin: 0;
+  box-sizing: border-box;
+} */
+
+li {
+  list-style: none;
 }
+
+a {
+  text-decoration: none;
+  color: #000;
+}
+
+button {
+  /* background: none; */
+  border: none;
+}
+
+.layout {
+  @apply pt-[52px]
+}
+
 .navbar {
   @apply flex justify-between items-center fixed w-full h-[52px] top-0 shadow-sm bg-white px-[10px]
 }
@@ -30,12 +47,12 @@ button {background: none; border: none;}
 
 .navbar--mobile {
   @apply hidden fixed w-full left-0 top-[52px] text-white h-screen bg-blue-800
-
 }
 
 .navbar__list--item a:hover {
- @apply text-gray-600
+  @apply text-gray-600
 }
+
 @media only screen and (max-width: 600px) {
   .navbar__list {
     @apply hidden
@@ -48,17 +65,20 @@ button {background: none; border: none;}
   .navbar__list--mobile {
     @apply pl-[10px]
   }
+
   .navbar__list--item--mobile {
     @apply mt-[10px]
   }
+
   .navbar__list--item--mobile a {
     @apply text-white cursor-pointer py-[5px] inline-block
-    
   }
 
-.navbar__button {
-  @apply block
+  .navbar__button {
+    @apply block
+  }
 }
 
-
-} 
+.infowindow {
+  @apply bg-blue-900 text-white block text-sm text-center h-6 rounded-md px-2 border-[0px]
+}
