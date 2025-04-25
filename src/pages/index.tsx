@@ -1,19 +1,36 @@
-import Layout from "@/components/Layout";
-import Link from "next/link";
-
+import Map from "@/components/Map";
 export default function Home() {
+
   return (
-    <Layout>
-    <h1>Map Index Page</h1>
-    <ul>
-      <li><Link href="/stores">맛집 목록</Link></li>
-      <li><Link href="/stores/new">맛집 생성</Link></li>
-      <li><Link href="/stores/1">맛집 상세 페이지</Link></li>
-      <li><Link href="/stores/1/edit">맛집 수정</Link></li>
-      <li><Link href="/users/login">로그인</Link></li>
-      <li><Link href="/users/mypage">마이 페이지</Link></li>
-      <li><Link href="/users/likes">찜힌 맛집</Link></li>
-    </ul>
-    </Layout>
+    <>
+     <Map />
+    </>
+
+    // <>
+    //   <h1 className="font-bold">Map Index Page</h1>
+    //   <ul className="px-4">
+    //     <li>
+    //       <Link href="/stores">맛집 목록</Link>
+    //     </li>
+    //     <li>
+    //       <Link href="/stores/new">맛집 생성</Link>
+    //     </li>
+    //     <li>
+    //       <Link href="/stores/1">맛집 상세 페이지</Link>
+    //     </li>
+    //     <li>
+    //       <Link href="/stores/1/edit">맛집 수정</Link>
+    //     </li>
+    //     <li>
+    //       <Link href="/users/login">로그인</Link>
+    //     </li>
+    //     <li>
+    //       <Link href="/users/mypage">마이 페이지</Link>
+    //     </li>
+    //     <li>
+    //       <Link href="/users/likes">찜힌 맛집</Link>
+    //     </li>
+    //   </ul>
+    // </>
   );
 }
