@@ -1,9 +1,24 @@
 import { StoreType } from "@/interface"
 import Image from "next/image"
+import axios from "axios";
+import { useQuery } from "@tanstack/react-query";
+import Loading from "@/components/Loading";
+export default function StoreListPage () {
 
-export default function StoreListPage ({stores}: {stores:StoreType[]}) {
-  console.log(stores)
+const {isLoading, isError, data: stores} = useQuery({
+  queryKey: ['stores'],
+  queryFn: async () => {
+    const { data } = await axios('/api/stores');
+    return data as StoreType[];
+  },
+});
+
+// if(isLoading) return <div>Is Loadig...</div>
+if(isError) return <div className="w-full h-screen mx-auto pt-[10%] text-red-500 text-center font-semibold">
+다시 시도해주세요
+</div>
   return (
+    isLoading ? <Loading /> :
     <div className="px-4 md:max-w-4xl mx-auto py-8">
       <ul role="list" className="divide-y divide-gray-100">
         {stores?.map((store, index) => (
@@ -11,8 +26,8 @@ export default function StoreListPage ({stores}: {stores:StoreType[]}) {
             <div className="flex gap-x-4">
               <Image
                 src={
-                  store?.bizcnd_code_nm
-                    ? `/images/markers/${store?.bizcnd_code_nm}.png`
+                  store?.category
+                    ? `/images/markers/${store?.category}.png`
                     : "/images/markers/default.png"
                 }
                 width={48}
@@ -21,34 +36,25 @@ export default function StoreListPage ({stores}: {stores:StoreType[]}) {
               />
               <div>
                 <div className="text-sm font-semibold leading-6 text-gray-900">
-                  {store?.upso_nm}
+                  {store?.name}
                 </div>
                 <div className="mt-1 text-xs truncate font-semibold leading-5 text-gray-500">
-                  {store?.upso_nm}
+                  {store?.storeType}
                 </div>
               </div>
             </div>
             <div className="hidden sm:flex sm:flex-col sm:items-end">
               <div className="text-sm font-semibold leading-6 text-gray-900">
-                {store?.rdn_code_nm}
+                {store?.address}
               </div>
               <div className="mt-1 text-xs truncate font-semibold leading-5 text-gray-500">
-                {store?.tel_no || "번호없음"} | {store?.crtfc_gbn_nm} |{" "}
-                {store?.bizcnd_code_nm}
+                {store?.phone || "번호없음"} | {store?.foodCertifyName} |{" "}
+                {store?.category}
               </div>
             </div>
           </li>
         ))}
       </ul>
     </div>
-  )
-}
-
-export async function getServerSideProps(){
-  const stores = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/stores`).then((res) => res.json())
-
-  return {
-    props: {stores},
-    
-  }
+  );
 }

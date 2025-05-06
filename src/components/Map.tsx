@@ -1,7 +1,7 @@
 /*global kakao*/
 import { Dispatch, SetStateAction } from "react";
 import Script from "next/script";
-import * as stores from "@/data/store_data.json";
+// import * as stores from "@/data/store_data.json";
 import Markers from "./Markers";
 import { AnyAaaaRecord } from "dns";
 declare global {

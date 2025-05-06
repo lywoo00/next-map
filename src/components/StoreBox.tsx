@@ -7,9 +7,10 @@ import {
   AiOutlinePhone,
 } from "react-icons/ai";
 import { HiOutlineMapPin } from "react-icons/hi2";
+import { StoreType } from "@/interface";
 
 interface StoreBoxprops {
-  store: any;
+  store: StoreType | null;
   setStore: Dispatch<SetStateAction<any>>;
 }
 
@@ -23,8 +24,8 @@ export default function StoreBox({ store, setStore }: StoreBoxprops) {
               <div className="flex gap-4 items-start w-full">
                 <Image
                   src={
-                    store?.bizcnd_code_nm
-                      ? `/images/markers/${store?.bizcnd_code_nm}.png`
+                    store?.category
+                      ? `/images/markers/${store?.category}.png`
                       : `/images/markers/default.png`
                   }
                   width={40}
@@ -32,8 +33,8 @@ export default function StoreBox({ store, setStore }: StoreBoxprops) {
                   alt="아이콘 이미지"
                 />
                 <div>
-                  <p className="font-semibold">{store?.upso_nm}</p>
-                  <p className="font-sm">{store?.cob_code_nm}</p>
+                  <p className="font-semibold">{store?.name}</p>
+                  <p className="font-sm">{store?.storeType}</p>
                 </div>
               </div>
               <button type="button" onClick={() => setStore(null)}>
@@ -44,23 +45,23 @@ export default function StoreBox({ store, setStore }: StoreBoxprops) {
               <p className="flex gap-2 items-start">
                 <HiOutlineMapPin className="" />
                 <span className="leading-none font-xs">
-                  {store?.rdn_code_nm}
+                  {store?.address}
                 </span>
               </p>
               <p className="mt-2 flex gap-2 items-start ">
                 <AiOutlinePhone className="" />
-                <span className="leading-none font-xs">{store?.tel_no}</span>
+                <span className="leading-none font-xs">{store?.phone}</span>
               </p>
               <p className="mt-2 flex gap-2 items-start ">
                 <AiTwotoneInfoCircle className="" />
                 <span className="leading-none font-xs">
-                  {store?.crtfc_gbn_nm}
+                  {store?.foodCertifyName}
                 </span>
               </p>
               <p className="mt-2 flex gap-2 items-start ">
                 <AiOutlineCheckCircle className="" />
                 <span className="leading-none font-xs">
-                  {store?.bizcnd_code_nm}
+                  {store?.category}
                 </span>
               </p>
             </div>
