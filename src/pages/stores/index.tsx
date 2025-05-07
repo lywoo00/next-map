@@ -1,27 +1,59 @@
-import { StoreType } from "@/interface"
-import Image from "next/image"
+import { StoreType } from "@/interface";
+import Image from "next/image";
 import axios from "axios";
 import { useQuery } from "@tanstack/react-query";
 import Loading from "@/components/Loading";
-export default function StoreListPage () {
+import { useEffect, useState } from "react";
+export default function StoreListPage() {
+  type ApiResponse = {
+    stores: StoreType[];
+    totalPages: number;
+  };
+  const [page, setPage] = useState(1);
+  const { isLoading, isError, data } = useQuery<ApiResponse>({
+    queryKey: ["stores", page],
+    queryFn: async () => {
+      const res = await axios.get(`/api/stores?page=${page}`);
+      return res.data;
+    },
+    // keepPreviousData: true,
+  });
 
-const {isLoading, isError, data: stores} = useQuery({
-  queryKey: ['stores'],
-  queryFn: async () => {
-    const { data } = await axios('/api/stores');
-    return data as StoreType[];
-  },
-});
+  if (!data) return null;
 
-// if(isLoading) return <div>Is Loadig...</div>
-if(isError) return <div className="w-full h-screen mx-auto pt-[10%] text-red-500 text-center font-semibold">
-다시 시도해주세요
-</div>
-  return (
-    isLoading ? <Loading /> :
+  let groupStart = Math.max(page - Math.floor(10 / 2), 1);
+  let groupEnd = groupStart + 10 -1;
+
+  if (groupEnd > data?.totalPages) {
+    groupEnd = data?.totalPages;
+    groupStart = Math.max(groupEnd - 10 + 1, 1);
+  }
+
+  const pagenationArrowBtn = (type: string) => {
+    if(type == "prev"){
+      setPage(Math.max(1, groupStart - 10))     
+    }
+    if(type == "next"){
+      setPage(Math.min(data.totalPages, groupStart + 10))
+    }
+  }
+
+  const pagenationNumBtn = (pageNumber: number) => {
+      setPage(pageNumber)
+    }
+
+  if (isError)
+    return (
+      <div className="w-full h-screen mx-auto pt-[10%] text-red-500 text-center font-semibold">
+        다시 시도해주세요
+      </div>
+    );
+  return isLoading ? (
+    <Loading />
+  ) : (
     <div className="px-4 md:max-w-4xl mx-auto py-8">
       <ul role="list" className="divide-y divide-gray-100">
-        {stores?.map((store, index) => (
+        {data?.stores?.map((store, index) => (
           <li className="flex justify-between gap-x-6 py-5" key={index}>
             <div className="flex gap-x-4">
               <Image
@@ -55,6 +87,36 @@ if(isError) return <div className="w-full h-screen mx-auto pt-[10%] text-red-500
           </li>
         ))}
       </ul>
+      <div className="pagenation-wrap flex justify-center">
+        <button
+          onClick={()=>pagenationArrowBtn("prev")} disabled={groupStart === 1}>
+          ◀️
+        </button>
+        <ul className="pagenation flex justify-center">
+          {Array.from({ length: (groupEnd) - groupStart + 1 }, (_, i) => {
+            const pageNumber = groupStart + i;
+            return (
+              <li>
+                <button
+                  key={pageNumber}
+                  onClick={() => pagenationNumBtn(pageNumber)}
+                  className={`px-2 ${
+                    page === pageNumber ? "font-bold underline" : ""
+                  }`}
+                >
+                  {pageNumber}
+                </button>
+              </li>
+            );
+          })}
+        </ul>
+        <button
+          onClick={() => pagenationArrowBtn("next")}
+          disabled={groupEnd === data.totalPages}
+        >
+          ▶️
+        </button>
+      </div>
     </div>
   );
 }
