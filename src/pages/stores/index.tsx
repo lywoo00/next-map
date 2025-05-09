@@ -6,12 +6,12 @@ import Loading from "@/components/Loading";
 import { useEffect, useState } from "react";
 export default function StoreListPage() {
   type ApiResponse = {
-    stores: StoreType[];
+    skipStores: StoreType[];
     totalPages: number;
   };
   const [page, setPage] = useState(1);
   const { isLoading, isError, data } = useQuery<ApiResponse>({
-    queryKey: ["stores", page],
+    queryKey: ["skipStores", page],
     queryFn: async () => {
       const res = await axios.get(`/api/stores?page=${page}`);
       return res.data;
@@ -53,7 +53,7 @@ export default function StoreListPage() {
   ) : (
     <div className="px-4 md:max-w-4xl mx-auto py-8">
       <ul role="list" className="divide-y divide-gray-100">
-        {data?.stores?.map((store, index) => (
+        {data?.skipStores?.map((store, index) => (
           <li className="flex justify-between gap-x-6 py-5" key={index}>
             <div className="flex gap-x-4">
               <Image

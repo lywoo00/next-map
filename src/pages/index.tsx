@@ -9,6 +9,7 @@ export default function Home({stores}: {stores: StoreType[]}) {
   const [map, setMap] = useState(null);
   const [currentStore, setCurrentStore] = useState(null);
   // const storeDatas = stores["DATA"];
+  console.log("stores.data:", stores);
 
   console.log(currentStore);
   return (
@@ -28,7 +29,7 @@ export async function getStaticProps(){
 const stores = await axios(`${process.env.NEXT_PUBLIC_API_URL}/api/stores`)
 
 return {
-  props: {stores: stores.data},
+  props: {stores: stores.data.allStores},
   revalidate: 60 * 60
 }
 }

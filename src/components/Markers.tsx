@@ -13,6 +13,7 @@ export default function Markers({
   setCurrentStore,
 }: MarkersProps) {
   const loadKakaoMarkers = useCallback(() => {
+    console.log('123',storeDatas)
     if (map) {
       storeDatas?.map((store) => {
         const makerPosition = new window.kakao.maps.LatLng(
