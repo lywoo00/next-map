@@ -2,9 +2,13 @@ import { useState } from "react";
 import Link from "next/link";
 import { IoMenu } from "react-icons/io5";
 import { IoClose } from "react-icons/io5";
+import { signOut, useSession } from "next-auth/react";
 
 const Navbar = () => {
   const [isOpen, setIsOpen] = useState(false);
+  const {data, status} = useSession()
+
+  console.log("data, status", data, status)
   return (
     <div className="navbar">
       <Link className="navbar__logo" href="/">
@@ -20,8 +24,13 @@ const Navbar = () => {
         <li className="navbar__list--item">
           <Link href="/users/likes">찜한 가게</Link>
         </li>
+        
         <li className="navbar__list--item">
-          <Link href="/users/login">로그인</Link>
+        {
+          status === "authenticated" ? <button onClick={() => signOut({callbackUrl:"/"})}>로그아웃</button> : 
+          <Link href="/api/auth/signin">로그인</Link>
+        }
+         
         </li>
       </ul>
       {/* 모바일 버튼 */}
@@ -46,7 +55,7 @@ const Navbar = () => {
               <Link href="/users/likes">찜한 가게</Link>
             </li>
             <li className="navbar__list--item--mobile">
-              <Link href="/users/login">로그인</Link>
+              <Link href="/api/auth/signin">로그인</Link>
             </li>
           </ul>
         </div>
