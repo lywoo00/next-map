@@ -55,7 +55,10 @@ const Navbar = () => {
               <Link href="/users/likes">찜한 가게</Link>
             </li>
             <li className="navbar__list--item--mobile">
-              <Link href="/api/auth/signin">로그인</Link>
+            {
+          status === "authenticated" ? <button onClick={() => signOut({callbackUrl:"/"})}>로그아웃</button> : 
+          <Link href="/api/auth/signin">로그인</Link>
+        }
             </li>
           </ul>
         </div>
