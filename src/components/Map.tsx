@@ -12,8 +12,10 @@ declare global {
 
 interface MapProps {
   setMap: Dispatch<SetStateAction<any>>;
+  lat?: string | null;
+  lng?: string | null;
 }
-export default function Map({ setMap }: MapProps) {
+export default function Map({ setMap, lat, lng }: MapProps) {
   const DEFAULT_LAT = 37.50042;
   const DEFUALT_LNG = 127.026821;
   const loadKakaoMap = () => {
@@ -21,12 +23,26 @@ export default function Map({ setMap }: MapProps) {
     console.log("✅ Kakao maps is available");
     window.kakao.maps.load(() => {
       const mapContainer = document.getElementById("map");
-      const mapOption = {
-        center: new window.kakao.maps.LatLng(DEFAULT_LAT, DEFUALT_LNG),
-        level: 3,
-      };
-      const map = new window.kakao.maps.Map(mapContainer, mapOption);
+      if (!mapContainer) return;
+      // const mapOption = null;
+
+      if(lat && lng) {
+        const mapOption = {
+          center: new window.kakao.maps.LatLng(parseFloat(lat), parseFloat(lng)),
+          level: 3,
+        };
+        const map = new window.kakao.maps.Map(mapContainer, mapOption);
       setMap(map);
+      } else {
+        const mapOption = {
+          center: new window.kakao.maps.LatLng(DEFAULT_LAT, DEFUALT_LNG),
+          level: 3,
+        };
+        const map = new window.kakao.maps.Map(mapContainer, mapOption);
+      setMap(map);
+      }
+      
+      
     });
   };
 

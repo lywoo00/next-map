@@ -4,21 +4,36 @@ import axios from "axios";
 import { useQuery } from "@tanstack/react-query";
 import Loading from "@/components/Loading";
 import { useEffect, useState } from "react";
+import SearchFilter from "@/components/SearchFilter";
 export default function StoreListPage() {
   type ApiResponse = {
     skipStores: StoreType[];
     totalPages: number;
   };
   const [page, setPage] = useState(1);
+
+  const [q, setQ] = useState<string | null>(null);
+  const [district, setDistrict] = useState<string | null>(null);
+
+  console.log('dsfdsf', q, district)
+  const searchParams = {
+    q: q,
+    district: district,
+  };
   const { isLoading, isError, data } = useQuery<ApiResponse>({
     queryKey: ["skipStores", page],
     queryFn: async () => {
-      const res = await axios.get(`/api/stores?page=${page}`);
+      const res = await axios.get(`/api/stores`,{
+        params: {
+          page: page,
+          ...searchParams,
+        }});
       return res.data;
     },
+    refetchOnWindowFocus:false
     // keepPreviousData: true,
   });
-
+  console.log('data111',data)
   if (!data) return null;
 
   let groupStart = Math.max(page - Math.floor(10 / 2), 1);
@@ -52,6 +67,7 @@ export default function StoreListPage() {
     <Loading />
   ) : (
     <div className="px-4 md:max-w-4xl mx-auto py-8">
+      <SearchFilter setQ={setQ} setDistrict={setDistrict} />
       <ul role="list" className="divide-y divide-gray-100">
         {data?.skipStores?.map((store, index) => (
           <li className="flex justify-between gap-x-6 py-5" key={index}>

@@ -4,13 +4,17 @@ import { PrismaClient } from "@prisma/client";
 type StoreListResponse =
   | { skipStores: StoreType[]; totalPages: number; allStores: StoreType[] }
   | { storeWithId: StoreType[] };
-
+  interface ParamsType {
+    id?: string
+    q?: string;
+    district? :string
+  }
 export default async function handler(
   req: NextApiRequest,
   res: NextApiResponse<StoreListResponse>
 ) {
   const page = parseInt(req.query.page as string) || 1
-  const {id}:{id?:string} = req.query
+  const {id, q, district}:ParamsType = req.query
 
   const prisma = new PrismaClient()
 
@@ -24,10 +28,18 @@ export default async function handler(
     orderBy: { id: "asc" },
     skip: (page - 1) * 10,
     take: 10,
+    where: {
+      name: q ? { contains: q } : {},
+      address: district ? { contains: district } : {},
+    },
   });
 
   const allStores = await prisma.store.findMany({
     orderBy: { id: "asc" },
+    where: {
+      name: q ? { contains: q } : {},
+      address: district ? { contains: district } : {},
+    },
   });
 
   const totalCount = await prisma.store.count();
