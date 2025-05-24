@@ -4,6 +4,8 @@ import Script from "next/script";
 // import * as stores from "@/data/store_data.json";
 import Markers from "./Markers";
 import { AnyAaaaRecord } from "dns";
+import { useLocationStore } from "@/justand/useStore";
+import { useMapStore } from "@/justand/useStore";
 declare global {
   interface Window {
     kakao: any;
@@ -11,13 +13,13 @@ declare global {
 }
 
 interface MapProps {
-  setMap: Dispatch<SetStateAction<any>>;
+  // setMap: Dispatch<SetStateAction<any>>;
   lat?: string | null;
   lng?: string | null;
 }
-export default function Map({ setMap, lat, lng }: MapProps) {
-  const DEFAULT_LAT = 37.50042;
-  const DEFUALT_LNG = 127.026821;
+export default function Map({ lat, lng }: MapProps) {
+  const {setMap} = useMapStore()
+  const location = useLocationStore();
   const loadKakaoMap = () => {
     // kakao map 로드
     console.log("✅ Kakao maps is available");
@@ -26,23 +28,24 @@ export default function Map({ setMap, lat, lng }: MapProps) {
       if (!mapContainer) return;
       // const mapOption = null;
 
-      if(lat && lng) {
+      if (lat && lng) {
         const mapOption = {
-          center: new window.kakao.maps.LatLng(parseFloat(lat), parseFloat(lng)),
+          center: new window.kakao.maps.LatLng(
+            parseFloat(lat),
+            parseFloat(lng)
+          ),
           level: 3,
         };
         const map = new window.kakao.maps.Map(mapContainer, mapOption);
-      setMap(map);
+        setMap(map);
       } else {
         const mapOption = {
-          center: new window.kakao.maps.LatLng(DEFAULT_LAT, DEFUALT_LNG),
+          center: new window.kakao.maps.LatLng(location.lat, location.lng),
           level: 3,
         };
         const map = new window.kakao.maps.Map(mapContainer, mapOption);
-      setMap(map);
+        setMap(map);
       }
-      
-      
     });
   };
 

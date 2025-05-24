@@ -9,3 +9,8 @@ export interface StoreType {
   storeType?: string | null;
   foodCertifyName?: string | null;
 }
+
+export interface LocationType {
+  lat?: string | null;
+  lng?: string | null;
+}

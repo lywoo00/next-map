@@ -1,18 +1,17 @@
 import { StoreType } from "@/interface";
 import { Dispatch, SetStateAction, useCallback, useEffect } from "react";
+import { useMapStore } from "@/justand/useStore";
 // import { StoreType } from "@/interface";
 
 interface MarkerProps {
-  map: any;
   store: StoreType;
-  //   setCurrentStore: Dispatch<SetStateAction<any>>;
 }
 
 export default function Marker({
-  map,
   store,
-}: //   setCurrentStore,
+}:
 MarkerProps) {
+  const {map} = useMapStore()
   const loadKakaoMarker = useCallback(() => {
     if (map) {
       const makerPosition = new window.kakao.maps.LatLng(store.lat, store.lng);

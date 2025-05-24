@@ -5,11 +5,10 @@ import { StoreType } from "@/interface";
 import Loader from "@/components/Loader";
 import Map from "@/components/Map";
 import { useState } from "react";
-import Marker from "@/components/marker";
+import Marker from "@/components/Marker";
 const StoreDetailPage = () => {
   const router = useRouter();
   const { id } = router.query;
-  const [map, setMap] = useState(null);
   // const 
 
   const fetchStore = async () => {
@@ -100,8 +99,8 @@ const StoreDetailPage = () => {
         </div>
         {isSuccess && (
           <>
-          <Map setMap={setMap} lat={store?.lat} lng={store?.lng} />
-        <Marker store={store} map={map} />
+          <Map lat={store?.lat} lng={store?.lng} />
+        <Marker store={store} />
         </>
         )}
         
