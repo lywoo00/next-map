@@ -24,6 +24,7 @@ export default async function handler(
     });
     return res.status(200).json({ storeWithId });
   }
+
   const skipStores = await prisma.store.findMany({
     orderBy: { id: "asc" },
     skip: (page - 1) * 10,
@@ -33,16 +34,15 @@ export default async function handler(
       address: district ? { contains: district } : {},
     },
   });
+  
 
   const allStores = await prisma.store.findMany({
     orderBy: { id: "asc" },
-    where: {
-      name: q ? { contains: q } : {},
-      address: district ? { contains: district } : {},
-    },
   });
 
-  const totalCount = await prisma.store.count();
+  const totalCount = await prisma.store.count({
+   
+  });
   const totalPages = Math.ceil(totalCount / 10);
 
   return res.status(200).json({ skipStores, totalPages, allStores });

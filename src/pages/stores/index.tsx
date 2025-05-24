@@ -5,6 +5,8 @@ import { useQuery } from "@tanstack/react-query";
 import Loading from "@/components/Loading";
 import { useEffect, useState } from "react";
 import SearchFilter from "@/components/SearchFilter";
+import { useDebounce } from "@/hooks/useDebounce";
+import StoreList from "@/components/StoreList";
 export default function StoreListPage() {
   type ApiResponse = {
     skipStores: StoreType[];
@@ -15,29 +17,50 @@ export default function StoreListPage() {
   const [q, setQ] = useState<string | null>(null);
   const [district, setDistrict] = useState<string | null>(null);
 
-  console.log('dsfdsf', q, district)
   const searchParams = {
     q: q,
     district: district,
   };
+
+
   const { isLoading, isError, data } = useQuery<ApiResponse>({
-    queryKey: ["skipStores", page],
+    queryKey: ["skipStores", page, q, district],
     queryFn: async () => {
-      const res = await axios.get(`/api/stores`,{
+      const res = await axios.get(`/api/stores`, {
         params: {
           page: page,
           ...searchParams,
-        }});
+        },
+      });
+
       return res.data;
     },
-    refetchOnWindowFocus:false
+    refetchOnWindowFocus: false,
     // keepPreviousData: true,
   });
-  console.log('data111',data)
+
+
+  useEffect(() => {
+    setPage(1);
+  }, [q, district]);
+
+  // useEffect(() => {
+  //   setQ("")
+  // },[district])
+
+  // useEffect(() => {
+  //   setDistrict("")
+  // },[q])
+
+  
+
+
   if (!data) return null;
 
+
+
   let groupStart = Math.max(page - Math.floor(10 / 2), 1);
-  let groupEnd = groupStart + 10 -1;
+  let groupEnd = groupStart + 10 - 1;
 
   if (groupEnd > data?.totalPages) {
     groupEnd = data?.totalPages;
@@ -45,17 +68,19 @@ export default function StoreListPage() {
   }
 
   const pagenationArrowBtn = (type: string) => {
-    if(type == "prev"){
-      setPage(Math.max(1, groupStart - 10))     
+    if (type == "prev") {
+      setPage(Math.max(1, groupStart - 10));
     }
-    if(type == "next"){
-      setPage(Math.min(data.totalPages, groupStart + 10))
+    if (type == "next") {
+      setPage(Math.min(data.totalPages, groupStart + 10));
     }
-  }
+  };
 
   const pagenationNumBtn = (pageNumber: number) => {
-      setPage(pageNumber)
-    }
+    setPage(pageNumber);
+  };
+
+
 
   if (isError)
     return (
@@ -67,52 +92,20 @@ export default function StoreListPage() {
     <Loading />
   ) : (
     <div className="px-4 md:max-w-4xl mx-auto py-8">
-      <SearchFilter setQ={setQ} setDistrict={setDistrict} />
-      <ul role="list" className="divide-y divide-gray-100">
-        {data?.skipStores?.map((store, index) => (
-          <li className="flex justify-between gap-x-6 py-5" key={index}>
-            <div className="flex gap-x-4">
-              <Image
-                src={
-                  store?.category
-                    ? `/images/markers/${store?.category}.png`
-                    : "/images/markers/default.png"
-                }
-                width={48}
-                height={48}
-                alt="아이콘 이미지"
-              />
-              <div>
-                <div className="text-sm font-semibold leading-6 text-gray-900">
-                  {store?.name}
-                </div>
-                <div className="mt-1 text-xs truncate font-semibold leading-5 text-gray-500">
-                  {store?.storeType}
-                </div>
-              </div>
-            </div>
-            <div className="hidden sm:flex sm:flex-col sm:items-end">
-              <div className="text-sm font-semibold leading-6 text-gray-900">
-                {store?.address}
-              </div>
-              <div className="mt-1 text-xs truncate font-semibold leading-5 text-gray-500">
-                {store?.phone || "번호없음"} | {store?.foodCertifyName} |{" "}
-                {store?.category}
-              </div>
-            </div>
-          </li>
-        ))}
-      </ul>
+      <SearchFilter setQ={setQ} q={q} setDistrict={setDistrict} district={district} />
+      <StoreList stores={data.skipStores} />
       <div className="pagenation-wrap flex justify-center">
         <button
-          onClick={()=>pagenationArrowBtn("prev")} disabled={groupStart === 1}>
+          onClick={() => pagenationArrowBtn("prev")}
+          disabled={groupStart === 1}
+        >
           ◀️
         </button>
         <ul className="pagenation flex justify-center">
-          {Array.from({ length: (groupEnd) - groupStart + 1 }, (_, i) => {
+          {Array.from({ length: groupEnd - groupStart + 1 }, (_, i) => {
             const pageNumber = groupStart + i;
             return (
-              <li>
+              <li key={i}>
                 <button
                   key={pageNumber}
                   onClick={() => pagenationNumBtn(pageNumber)}
